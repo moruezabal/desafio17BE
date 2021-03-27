@@ -2,11 +2,15 @@ let socket = io.connect('http://localhost:8080/', { forceNew : true});
 
 let formularioChat = document.getElementById("formChat");
 
-socket.on('message', (data) => {
-    render(data);
+socket.on('listProducts', (data) => {
+    renderProducts(data);
 })
 
-function render (data){
+socket.on('messages', (chats) => {
+    renderChats(chats);
+})
+
+function renderProducts(data){
     let html = data.map( elem =>{
        return ( `<tr>
                     <td>${elem.title}</td>
@@ -18,27 +22,38 @@ function render (data){
     document.getElementById('bodyTable').innerHTML = html;
 }
 
-function addProduct (){
+function renderChats(chats){
+    let html = chats.map(elem => {
+        return (`<p>
+                    <span class=email>${elem.email} </span>
+                    <span class=text>${elem.text} </span>
+                    <span class=date>${elem.date} </span>
+                </p>`);
+    }).join(" ");
+
+    document.getElementById('listaMensajes').innerHTML = html;
+}
+
+function addProduct(){
     let product = {
         title : document.getElementById('title').value,
         price: document.getElementById('price').value,
         thumbnail: document.getElementById('thumbnail').value
     }
-    socket.emit('new-message', product);
+    socket.emit('new-product', product);
     return false;
 };
 
 formularioChat.addEventListener('submit', ()=>{
     event.preventDefault();
-    let now = new Date(Date.now());
-    let dateAndHour = now.toUTCString()
-
+    let now = moment().format('DD MMMM YYYY, h:mm:ss a');
 
     let chat = {
         email : document.getElementById('email').value,
         text: document.getElementById('message').value,
-        date: dateAndHour
+        date: now
     }
 
-    console.log(JSON.stringify(chat));
+    socket.emit('new-message', chat);
+    return false;
 })
