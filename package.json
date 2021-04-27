@@ -2,7 +2,7 @@
   "name": "12-websocket-parte1",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,8 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "knex": "^0.95.4",
     "moment": "^2.29.1",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.7",
-    "socket.io": "^4.0.0"
+    "socket.io": "^4.0.0",
+    "sqlite3": "^5.0.2"
   }
 }
